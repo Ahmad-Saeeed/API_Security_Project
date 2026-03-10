@@ -1,0 +1,20 @@
+{
+  "scanDate": "2026-03-10",
+  "apisTested": 3,
+  "testsExecuted": 9,
+  "status": "Completed",
+  "results": [
+    {
+      "api": "/api/v2/pickups",
+      "risk": "Medium"
+    },
+    {
+      "api": "/api/v2/businesses/add-bank-info",
+      "risk": "Critical"
+    },
+    {
+      "api": "/api/v2/users/forget-password",
+      "risk": "High"
+    }
+  ]
+}
