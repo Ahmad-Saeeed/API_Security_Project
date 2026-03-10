@@ -26,6 +26,8 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: maven
+      - name: Clean Maven Cache
+        run: mvn dependency:purge-local-repository clean
 
       - name: Build Project
         run: mvn -B clean compile
