@@ -7,6 +7,8 @@ on:
   schedule:
     - cron: "0 2 * * *"
 
+  workflow_dispatch:
+
 jobs:
 
   security-tests:
@@ -22,13 +24,32 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 8
+          cache: maven
+
+      - name: Build Project
+        run: mvn -B clean compile
 
       - name: Run Security Tests
-        run: mvn clean test
+        run: mvn -B test
+
+      - name: Generate Test Report
+        run: mvn surefire-report:report
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         with:
-          name: security-reports
+          name: test-results
           path: target/surefire-reports
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report
+          path: target/site
+
+      - name: Upload Security Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: security-report.json

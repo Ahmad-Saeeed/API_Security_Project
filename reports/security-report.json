@@ -1,20 +1,66 @@
 {
   "scanDate": "2026-03-10",
+  "project": "API Security Automation",
+  "environment": "staging",
   "apisTested": 3,
   "testsExecuted": 9,
   "status": "Completed",
+  "summary": {
+    "critical": 1,
+    "high": 1,
+    "medium": 1,
+    "low": 0
+  },
   "results": [
     {
       "api": "/api/v2/pickups",
-      "risk": "Medium"
+      "risk": "Medium",
+      "tests": [
+        {
+          "name": "Valid Pickup Creation",
+          "result": "Passed"
+        },
+        {
+          "name": "Missing Authorization",
+          "result": "Passed"
+        },
+        {
+          "name": "SQL Injection Test",
+          "result": "Passed"
+        }
+      ]
     },
     {
       "api": "/api/v2/businesses/add-bank-info",
-      "risk": "Critical"
+      "risk": "Critical",
+      "tests": [
+        {
+          "name": "Valid Bank Update",
+          "result": "Passed"
+        },
+        {
+          "name": "Missing Token",
+          "result": "Passed"
+        },
+        {
+          "name": "Script Injection Test",
+          "result": "Passed"
+        }
+      ]
     },
     {
       "api": "/api/v2/users/forget-password",
-      "risk": "High"
+      "risk": "High",
+      "tests": [
+        {
+          "name": "Valid Reset Request",
+          "result": "Passed"
+        },
+        {
+          "name": "Invalid Email Handling",
+          "result": "Passed"
+        }
+      ]
     }
   ]
 }

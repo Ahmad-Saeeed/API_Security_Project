@@ -11,16 +11,16 @@ import static org.hamcrest.Matchers.*;
 public class PickupSecurityTest {
 
     String BASE_URL = "https://stg-app.bosta.co";
-    String TOKEN = AuthUtil.generateToken();
+    String TOKEN;
 
     @BeforeClass
     public void setup() {
         RestAssured.baseURI = BASE_URL;
+        TOKEN = AuthUtil.generateToken(); // generate valid token
     }
 
     @Test
     public void validPickupCreation() {
-
         String body = "{"
                 + "\"businessLocationId\":\"MFqXsoFhxO\","
                 + "\"contactPerson\":{"
@@ -30,9 +30,9 @@ public class PickupSecurityTest {
                 + "\"phone\":\"+201055592829\""
                 + "},"
                 + "\"scheduledDate\":\"2025-06-30\","
-                + "\"numberOfParcels\":\"3\","
+                + "\"numberOfParcels\":3,"
                 + "\"hasBigItems\":false,"
-                + "\"repeatedData\":{\"repeatedType\":\"OneTime\"},"
+                + "\"repeatedData\":{\"repeatedType\":\"One Time\"},"
                 + "\"creationSrc\":\"Web\""
                 + "}";
 
@@ -48,8 +48,8 @@ public class PickupSecurityTest {
 
     @Test
     public void missingAuthorization() {
-
         given()
+                .contentType("application/json") // Required to avoid 415
                 .when()
                 .post("/api/v2/pickups")
                 .then()
@@ -58,7 +58,6 @@ public class PickupSecurityTest {
 
     @Test
     public void sqlInjectionTest() {
-
         String body = "{"
                 + "\"businessLocationId\":\"MFqXsoFhxO\","
                 + "\"contactPerson\":{"
@@ -68,9 +67,9 @@ public class PickupSecurityTest {
                 + "\"phone\":\"+201055592829\""
                 + "},"
                 + "\"scheduledDate\":\"2025-06-30\","
-                + "\"numberOfParcels\":\"3\","
+                + "\"numberOfParcels\":3,"
                 + "\"hasBigItems\":false,"
-                + "\"repeatedData\":{\"repeatedType\":\"OneTime\"},"
+                + "\"repeatedData\":{\"repeatedType\":\"One Time\"},"
                 + "\"creationSrc\":\"Web\""
                 + "}";
 

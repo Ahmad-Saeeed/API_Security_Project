@@ -11,22 +11,22 @@ import static org.hamcrest.Matchers.*;
 public class BankInfoSecurityTest {
 
     String BASE_URL = "https://stg-app.bosta.co";
-    String TOKEN = AuthUtil.generateToken();
+    String TOKEN;
 
     @BeforeClass
-    public void setup(){
+    public void setup() {
         RestAssured.baseURI = BASE_URL;
+        TOKEN = AuthUtil.generateToken();
     }
 
     @Test
-    public void validBankUpdate(){
-
+    public void validBankUpdate() {
         String payload = "{"
                 + "\"bankInfo\":{"
                 + "\"beneficiaryName\":\"Test User\","
                 + "\"bankName\":\"NBG\","
-                + "\"ibanNumber\":\"EG123456789\","
-                + "\"accountNumber\":\"123\""
+                + "\"ibanNumber\":\"EG1234567890123456789012\","
+                + "\"accountNumber\":\"123456\""
                 + "},"
                 + "\"paymentInfoOtp\":\"123\""
                 + "}";
@@ -42,9 +42,9 @@ public class BankInfoSecurityTest {
     }
 
     @Test
-    public void missingToken(){
-
+    public void missingToken() {
         given()
+                .contentType("application/json") // Prevent 415
                 .when()
                 .post("/api/v2/businesses/add-bank-info")
                 .then()
@@ -52,14 +52,13 @@ public class BankInfoSecurityTest {
     }
 
     @Test
-    public void scriptInjection(){
-
+    public void scriptInjection() {
         String payload = "{"
                 + "\"bankInfo\":{"
                 + "\"beneficiaryName\":\"<script>alert(1)</script>\","
                 + "\"bankName\":\"NBG\","
-                + "\"ibanNumber\":\"EG123456789\","
-                + "\"accountNumber\":\"123\""
+                + "\"ibanNumber\":\"EG1234567890123456789012\","
+                + "\"accountNumber\":\"123456\""
                 + "},"
                 + "\"paymentInfoOtp\":\"123\""
                 + "}";
