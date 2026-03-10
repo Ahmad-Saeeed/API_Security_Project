@@ -3,53 +3,65 @@ name: API Security Tests
 on:
   push:
     branches: [ main ]
-
   schedule:
     - cron: "0 2 * * *"
-
   workflow_dispatch:
 
 jobs:
-
   security-tests:
-
     runs-on: ubuntu-latest
 
     steps:
-
+      # 1️⃣ Checkout code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Java 17 explicitly
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
           cache: maven
-      - name: Clean Maven Cache
-        run: mvn dependency:purge-local-repository clean
 
+      # 3️⃣ Confirm Java version
+      - name: Confirm Java Version
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME"
+          java -version
+          mvn -version
+
+      # 4️⃣ Purge old Maven dependencies to prevent class version conflicts
+      - name: Purge Local Maven Repository
+        run: mvn dependency:purge-local-repository -DreResolve=true
+
+      # 5️⃣ Build Project
       - name: Build Project
         run: mvn -B clean compile
 
+      # 6️⃣ Run Security Tests
       - name: Run Security Tests
         run: mvn -B test
 
+      # 7️⃣ Generate HTML report
       - name: Generate Test Report
         run: mvn surefire-report:report
 
+      # 8️⃣ Upload Test Results
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: target/surefire-reports
 
+      # 9️⃣ Upload HTML report
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4
         with:
           name: html-report
           path: target/site
 
+      # 🔟 Upload Security Scan JSON
       - name: Upload Security Scan Report
         uses: actions/upload-artifact@v4
         with:
