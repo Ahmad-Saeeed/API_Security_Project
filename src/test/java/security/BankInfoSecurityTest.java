@@ -3,6 +3,7 @@ package security;
 import io.restassured.RestAssured;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import utils.AuthUtil;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -10,7 +11,7 @@ import static org.hamcrest.Matchers.*;
 public class BankInfoSecurityTest {
 
     String BASE_URL = "https://stg-app.bosta.co";
-    String TOKEN = "YOUR_JWT_TOKEN";
+    String TOKEN = AuthUtil.generateToken();
 
     @BeforeClass
     public void setup(){
