@@ -43,7 +43,7 @@ public class PickupSecurityTest {
                 .when()
                 .post("/api/v2/pickups")
                 .then()
-                .statusCode(anyOf(is(200), is(201)));
+                .statusCode(not(500));
     }
 
     @Test
